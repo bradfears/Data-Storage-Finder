@@ -17,3 +17,5 @@ Configuring the Data Storage Finder will take some time. You are literally build
 
 ## Configuration
 1. Edit your config.php file to specify database name, user, etc. Also, **very important**, change your SALT.
+2. Log into the Administration Menu (i.e. <domain>/dsf/admin).
+
