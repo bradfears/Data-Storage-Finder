@@ -10,6 +10,11 @@ The original version of the Data Storage Finder (DSF) was created by the Cornell
 
 Configuring the Data Storage Finder will take some time and planning. You are literally building a portfolio of all data storage services available at your institution. Depending on how you configure it, you could specify things like cost, availability, where to get support, etc. You also need to build a list of questions to help filter results. There are many things to do, so let's get started!
 
+## Requirements
+- PHP v7+
+- MySQL/MariaDB
+- Web server (Apache, Nginx, etc.)
+
 ## Installation
 1. Get a copy of the latest relase from this repository. Refer to the **Releases** section on the right of this page.
 2. Extract the files and place them somewhere in your website directory (e.g., /var/www/html/dsf).
