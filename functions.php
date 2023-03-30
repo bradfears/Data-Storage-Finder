@@ -216,7 +216,6 @@ function getSingleItemForUpdate($selectId) {
 	 		$result2 = $database->query($query_field_type);
 
 	 		while ($row2 = $result2->fetch_assoc()) {
-	 			//$field_id2 = $row2['id'];
 	 			$field_type2 = $row2['type'];
 	 			echo "<h1>$field_type2</h1>";	 			
 	 			echo '<textarea id="'.$id.'" name="'.$id.'" rows="3" cols="1" class="ckeditor">';
@@ -271,100 +270,6 @@ function getSingleItemForUpdate($selectId) {
 	echo '</form>';
 
 }
-
-/*function getSingleItemForUpdate($selectId) {
-
-	global $database;
-
-	echo '<form action="item_update.php" method="POST">';
-	echo '<div class="form-group">';
-
-	$query_tagline = "SELECT tagline FROM items WHERE id = $selectId";
-	$result_tagline = $database->query($query_tagline);
-
-	while ($row0 = $result_tagline->fetch_assoc()) {
-		$item_tagline = $row0['tagline'];
-		echo "<h1>Subtitle / Tagline</h1>";
-		echo '<textarea id="'.$selectId.'" name="'.$selectId.'" rows="1" cols="1" class="form-control">';
-		echo $item_tagline;
-		echo '</textarea>';
-
-	}
-
-	$query = "SELECT * FROM item_fields WHERE item_id = $selectId";	
-	$result = $database->query($query);
-
-	while ($row = $result->fetch_assoc()) {
-		$id = $row['id'];
-		$item_id = $row['item_id'];
-		$field_type = $row['field_type'];
-		$field_text = $row['field_text'];	 	
-
-	 		$query_field_type = "SELECT * FROM field_types WHERE id = $field_type";
-	 		$result2 = $database->query($query_field_type);
-
-	 		while ($row2 = $result2->fetch_assoc()) {
-	 			$field_id2 = $row2['id'];
-	 			$field_type2 = $row2['type'];
-	 			echo "<h1>$field_type2</h1>";	 			
-	 			echo '<textarea id="'.$id.'" name="'.$id.'" rows="3" cols="1" class="ckeditor">';
-	 			echo $field_text;
-	 			echo '</textarea>';
-	 		} 	
-
-	}
-
-////////////////////
-	$query_sections = "SELECT id,name,description FROM sections ORDER BY display_order";
-	$result_sections = $database->query($query_sections);
-
-	while ($row1 = $result_sections->fetch_assoc()) {
-		$section_id = $row1['id'];
-		$section_name = $row1['name'];
-		$section_description = $row1['description'];
-
-		echo "<span style='font-size: 14px; font-family: Arial;'><b>$section_name</b></span><br>";
-
-	}
-///////////////////
-
-
-
-	$query_capabilities = "SELECT * FROM capabilities";
-	$result_capabilities = $database->query($query_capabilities);
-
-	echo '<p>&nbsp;</p>';
-
-	while ($row = $result_capabilities->fetch_assoc()) {
-		$id_checked = $row['id'];
-		$capability_checked = $row['capability'];
-
-		$query_checked = "SELECT id FROM capabilities_fields WHERE item_id='$selectId' AND capability_id='$id_checked'";
-		$result_checked = $database->query($query_checked);
-
-		$checked_row = $result_checked->fetch_row();
-
-		if (isset($checked_row)) {
-
-			echo "<input type='checkbox' name='capabilities[]' value='$id_checked' checked>";
-			echo "<label for='capabilities'>$capability_checked</label><br>";
-
-		} else {
-
-			echo "<input type='checkbox' name='capabilities[]' value='$id_checked'>";
-			echo "<label for='capabilities'>$capability_checked</label><br>";
-
-		}
-
-
-	}
-	
-	echo '</div><br>';
-	echo '<input type="hidden" id="saveId" name="saveId" value="'.$item_id.'">';
-	echo '<input class="btn btn-primary" type="submit" name="submit" value="Save">';
-	echo '</form>';
-
-}*/
 
 function getSingleFieldTypeForUpdate($editId) {
 
@@ -472,8 +377,7 @@ function updateSingleItem($saveId) {
 	}
 
 	$query_clear_capabilities = "DELETE FROM capabilities_fields WHERE item_id='$saveId'";
-	//$result_clear_capabilities = $database->query($query_clear_capabilities);
-	$database->query($query_clear_capabilities);
+	$result_clear_capabilities = $database->query($query_clear_capabilities);
 
 	foreach ($_POST['capabilities'] as $checkedKey => $checkedValue) {
 
