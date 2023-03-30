@@ -35,3 +35,9 @@ Configuring the Data Storage Finder will take some time and planning. You are li
   
     * FOURTH, it's time to add actual items. Click *Add Item* from the Admin Menu, then give the item a name and subtitle. These will be diplayed on the tiles that are presented to the user. After you add an item, go back and EDIT the item. Now you will see the fields you defined, such as "Cost". Enter the appropriate information for each field type.  
 
+## Screenshots (sorry I don't have a demo site yet)
+Main Screen
+[DSF-Main-Screen.jpg](https://postimg.cc/F1bgRg6Q)
+
+Admin Menu
+[DSF-Admin-Menu.jpg](https://postimg.cc/bGzf7R4N)
