@@ -216,7 +216,7 @@ function getSingleItemForUpdate($selectId) {
 	 		$result2 = $database->query($query_field_type);
 
 	 		while ($row2 = $result2->fetch_assoc()) {
-	 			$field_id2 = $row2['id'];
+	 			//$field_id2 = $row2['id'];
 	 			$field_type2 = $row2['type'];
 	 			echo "<h1>$field_type2</h1>";	 			
 	 			echo '<textarea id="'.$id.'" name="'.$id.'" rows="3" cols="1" class="ckeditor">';
@@ -472,7 +472,8 @@ function updateSingleItem($saveId) {
 	}
 
 	$query_clear_capabilities = "DELETE FROM capabilities_fields WHERE item_id='$saveId'";
-	$result_clear_capabilities = $database->query($query_clear_capabilities);
+	//$result_clear_capabilities = $database->query($query_clear_capabilities);
+	$database->query($query_clear_capabilities);
 
 	foreach ($_POST['capabilities'] as $checkedKey => $checkedValue) {
 
