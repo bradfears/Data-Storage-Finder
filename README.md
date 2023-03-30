@@ -19,6 +19,7 @@ Configuring the Data Storage Finder will take some time and planning. You are li
 1. Get a copy of the latest relase from this repository. Refer to the **Releases** section on the right of this page.
 2. Extract the files and place them somewhere in your website directory (e.g., /var/www/html/dsf).
 3. Create a MySQL/MariaDB database. The local database user should be granted ALL PRIVILEGES.
+4. Import the dsf_structure.sql file from the *database* directory in this repository.
 
 ## Configuration
 1. Edit your config.php file to specify database name, user, etc. Also, **very important**, change your SALT.
