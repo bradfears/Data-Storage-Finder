@@ -99,8 +99,7 @@ function createItem() {
 
 	while ($row = $result_all_field_types->fetch_assoc()) {
 		$field_type_id = $row['id'];
-
-		$query_insert_item_fields = "INSERT INTO item_fields (item_id,field_type) VALUES ($item_id,$field_type_id)";
+		$query_insert_item_fields = "INSERT INTO item_fields (item_id,field_type,field_text) VALUES ($item_id,$field_type_id,'')";
 		$result_insert_item_fields = $database->query($query_insert_item_fields);
 
 	}
@@ -303,7 +302,7 @@ function createFieldTypes() {
 
 	$field_type = $database->escape_string($_POST['field_type']);
 
-	$query = "INSERT INTO field_types (type) VALUES ('$field_type')";
+	$query = "INSERT INTO field_types (type,display_order) VALUES ('$field_type',1)";
 	$result = $database->query($query);
 	$field_type = $database->insert_id();
 
@@ -313,7 +312,7 @@ function createFieldTypes() {
 	while ($row = $result_all_items->fetch_assoc()) {
 		$item_id = $row['id'];
 
-		$insert_all_query = "INSERT INTO item_fields (item_id,field_type) VALUES ($item_id,$field_type)";
+		$insert_all_query = "INSERT INTO item_fields (item_id,field_type,field_text) VALUES ($item_id,$field_type,'')";
 		$result_all_query = $database->query($insert_all_query);
 
 	}
@@ -358,13 +357,9 @@ function updateSingleItem($saveId) {
 
 	global $database;
 
-	if ($_POST['saveId']) {
-		$saveId = $database->escape_string($_POST['saveId']);
-	}	
+	foreach ($_POST as $key => $value) {
 
-	foreach ($_POST as $key => $value) {		
-
-		if ((!is_array($value)) && $value != "Save") {
+		if ((!is_array($value)) && $value != "Save" && $key != "saveId") {
 
 			$query = "UPDATE item_fields SET field_text='$value' WHERE id='$key'";
 			$result = $database->query($query);
@@ -381,7 +376,7 @@ function updateSingleItem($saveId) {
 
 	foreach ($_POST['capabilities'] as $checkedKey => $checkedValue) {
 
-		$query_insert_capabilities_fields = "INSERT INTO capabilities_fields VALUES ('','$saveId','$checkedValue')";
+		$query_insert_capabilities_fields = "INSERT INTO capabilities_fields (item_id,capability_id) VALUES ('$saveId','$checkedValue')";
 		$result_insert_capabilities_fields = $database->query($query_insert_capabilities_fields);
 
 	}
@@ -817,7 +812,7 @@ function getAllSectionsForSelection($editId) {
 	while ($row3 = $result3->fetch_assoc()) {
 		$id3 = $row3['id'];
 		$section3 = $row3['name'];
-		if ((isset($additional_option)) && ($id3 != $id2)) {
+		if ($id3 != $id2) {
 			echo "<option value='$id3'>$section3</option>";
 		}
 	 	
@@ -831,21 +826,19 @@ function getAllSectionsForCreate() {
 
 	global $database;
 
-	$query1 = "SELECT nav_menu_section FROM capabilities";
-	$result1 = $database->query($query1);
-
-	$row1 = $result1->fetch_array();
-	$current_nav_menu_section = $row1['nav_menu_section'];
+	if (isset($_POST['section'])) {
+		$current_nav_menu_section = $database->escape_string($_POST['section']);
+	} 
 
 	if (isset($current_nav_menu_section)) {
 
-		$query2 = "SELECT id,name FROM sections WHERE id='$current_nav_menu_section'";
-		$result2 = $database->query($query2);
+		$query2a = "SELECT id,name FROM sections WHERE id='$current_nav_menu_section'";
+		$result2a = $database->query($query2a);
 
-		while ($row2 = $result2->fetch_assoc()) {
-			$id2 = $row2['id'];
-			$section2 = $row2['name'];
-			$additional_option = "<option value='$id2'>$section2</option>";
+		while ($row2a = $result2a->fetch_assoc()) {
+			$id2 = $row2a['id'];
+			$section2 = $row2a['name'];
+			$additional_option = "<option value='$id2' selected='selected'>$section2</option>";
 		}
 
 	}
@@ -862,9 +855,7 @@ function getAllSectionsForCreate() {
 	while ($row3 = $result3->fetch_assoc()) {
 		$id3 = $row3['id'];
 		$section3 = $row3['name'];
-		if ((isset($additional_option)) && ($id3 != $id2)) {
 			echo "<option value='$id3'>$section3</option>";
-		}
 	 	
 	}
 
