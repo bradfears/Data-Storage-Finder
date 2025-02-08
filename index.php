@@ -9,7 +9,7 @@ echo '
 <p>Welcome to the Data Storage Finder. Answer the questions below (left) to view the appropriate service(s) based on your selected criteria. Then click one or more tiles below (right) to see detailed information about each service. If you would like to see all services listed on a single page, <a style="color: green;" href="all_services.php">click here</a>.</p>
 <table class="table table-striped table-condensed">
 	<tr>
-		<td height="1000px">
+		<td height="400px">
 		<br>
 ';
 

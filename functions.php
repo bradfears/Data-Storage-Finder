@@ -1,5 +1,12 @@
 <?php
 
+/*
+This file contains all the functions that are used for the application.
+The code is written to be simple enough for a beginner to understand.
+If you find ways to optimize the code, please submit a pull request.
+If you find a bug, please submit an issue.
+*/
+
 require_once("config.php");
 
 class Database {
@@ -217,7 +224,7 @@ function getSingleItemForUpdate($selectId) {
 	 		while ($row2 = $result2->fetch_assoc()) {
 	 			$field_type2 = $row2['type'];
 	 			echo "<h1>$field_type2</h1>";	 			
-	 			echo '<textarea id="'.$id.'" name="'.$id.'" rows="3" cols="1" class="ckeditor">';
+	 			echo '<textarea id="'.$id.'" name="'.$id.'" rows="3" cols="1" class="tinymce">';
 	 			echo $field_text;
 	 			echo '</textarea>';
 	 		} 	
@@ -357,9 +364,11 @@ function updateSingleItem($saveId) {
 
 	global $database;
 
-	foreach ($_POST as $key => $value) {
+	foreach ($_POST as $key => $value) {		
 
 		if ((!is_array($value)) && $value != "Save" && $key != "saveId") {
+			
+			$value = $database->escape_string($value);
 
 			$query = "UPDATE item_fields SET field_text='$value' WHERE id='$key'";
 			$result = $database->query($query);
@@ -722,7 +731,7 @@ function getSingleSectionForUpdate($editId) {
 		echo '</textarea>';
 
 		echo "<h1>Description</h1>";
-		echo '<textarea id="description" name="description" rows="3" cols="1" class="ckeditor">';
+		echo '<textarea id="description" name="description" rows="3" cols="1" class="tinymce">';
 		echo $description;
 		echo '</textarea>';
 
@@ -943,7 +952,7 @@ function buildNavMenu() {
 		</script>
 
 		';
-
+		
 	 	echo "
 		    <div class='popup-overlay$popupCounter'>
 		        <div class='popup-content$popupCounter'>
@@ -962,7 +971,7 @@ function buildNavMenu() {
 	 		$result_capabilities = $database->query($query_capabilities);
 
 	 		while ($row2 = $result_capabilities->fetch_assoc()) {
-	 			$capability_id = $row2['id'];
+	 			$capability_id = $row2['id'];				
 	 			$capability_name = $row2['capability']; 
 	 			$capability_name_formatted = strtolower(str_replace(" ", "_", $capability_name));
 	 			$capability_name_formatted = str_replace("/", "_", $capability_name_formatted);
@@ -977,7 +986,7 @@ function buildNavMenu() {
 	 			echo "<br>";
 	 		}
 
-	 	echo '</div><p>&nbsp;</p>';
+	 	echo '</div><br>';
 
 	}
 
@@ -988,8 +997,8 @@ function populateResults() {
 	global $database;
 
 	echo '
-
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
 	<script type="text/javascript">
 
 	$(document).ready(function () {
@@ -1095,53 +1104,77 @@ function panelQuery() {
 
 	if (isset($_POST['ids'])) {
 
-		echo '<div class="flex-container">';
-
+		echo '<div class="flex-container">';		
+		
 		foreach($_POST['ids'] as $post_id) {
 			if(!isset($post_id)) {
 				continue;
-			}
-
+			}			
+			
 			$query_items = "SELECT * FROM items WHERE id='$post_id'";
 			$result_items = $database->query($query_items);
-
+			
 			while ($row1 = $result_items->fetch_assoc()) {
 				$item_id = $row1['id'];
 				$item_name = $row1['item_name'];
 
-				echo '<div class="flex-child">';
-
-				echo "<br><h3>$item_name</h3>";
+				echo '<table id="compare-tbl">';
+				echo '<thead>';
+				echo '<th>'.$item_name.'</th>';
+				echo '</thead>';
+				echo '<tbody>';
 
 				$query_item_fields = "SELECT * FROM item_fields INNER JOIN field_types WHERE field_type=field_types.id AND item_id=$item_id ORDER BY field_types.display_order ASC";
 				$result_item_fields = $database->query($query_item_fields);
 
+				$divNum = 1;
 				while ($row2 = $result_item_fields->fetch_assoc()) {
 					$field_type = $row2['field_type'];
 					$field_text = $row2['field_text'];
 					if ($field_text == "") {
 						$field_text = "<p>undefined</p>";
 					}
+					
+					echo "<tr valign='top'>";
 
 					$query_field_type = "SELECT type FROM field_types WHERE id=$field_type";
 					$result_field_type = $database->query($query_field_type);
-
+					
 					while ($row3 = $result_field_type->fetch_assoc()) {
 						$field_name = $row3['type'];
 						
-						echo "<span style='color: green; font-weight: bold;'>$field_name:</span> $field_text";
+						echo "<td><div class='div".$divNum."'><span style='color: green; font-weight: bold;'>$field_name:</span> $field_text</div></td>";
+						
+						echo "<script type='text/javascript'>";
+						
+						echo '
+						var heights = $("div.div'.$divNum.'").map(function () 
+							{
+							return $(this).height();
+							}).get();
 
-					}
+						maxHeight = Math.max.apply(null, heights);
+						';
+						
+						echo "$('#compare-tbl div.div".$divNum."').css('height', maxHeight); // Set all table row heights to longest field_text";
+						
+						echo "</script>";
+
+					$divNum++;
+					}					
+					
+					echo "</tr>";
 
 				}
 
-				echo '</div>';
-
+				echo '</tbody>';
+				echo '</table>';
+				
 			}
-
+			
 		}
 
-		echo '</div>';
+		echo '</div>';		
 
 	} 
 
@@ -1151,10 +1184,6 @@ function allServices() {
 
 	global $database;
 
-	echo '<div class="column">';
-	echo '<div class="row">';
-	echo '<div class="resultstable">';
-
 	$query_items = "SELECT * FROM items";
 	$result_items = $database->query($query_items);
 
@@ -1162,7 +1191,7 @@ function allServices() {
 		$item_id = $row1['id'];
 		$item_name = $row1['item_name'];
 
-		echo "<br><h3>$item_name</h3>";
+		echo "<h3>$item_name</h3>";
 
 		$query_item_fields = "SELECT * FROM item_fields INNER JOIN field_types WHERE field_type=field_types.id AND item_id=$item_id ORDER BY field_types.display_order ASC";
 		$result_item_fields = $database->query($query_item_fields);
@@ -1170,6 +1199,10 @@ function allServices() {
 		while ($row2 = $result_item_fields->fetch_assoc()) {
 			$field_type = $row2['field_type'];
 			$field_text = $row2['field_text'];
+			
+			if (empty($field_text)) {
+				$field_text = "<p>&nbsp;</p>";
+			}
 
 			$query_field_type = "SELECT type FROM field_types WHERE id=$field_type";
 			$result_field_type = $database->query($query_field_type);
@@ -1178,20 +1211,15 @@ function allServices() {
 
 				$field_name = $row3['type'];
 
-				echo '<div class="resultsrow">';
+				//echo '<div class="resultsrow">';
 				echo "<div class='resultscell'><span style='color: green; font-weight: bold;'>$field_name:</span> $field_text</div>";
-				echo '</div>';
+				//echo '</div>';
 
 			}		
 
 		}
 
-		echo '</div>';
-
 	}
-
-	echo '</div></div>';
-
 
 }
 

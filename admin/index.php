@@ -2,7 +2,6 @@
 
 session_start();
 
-//require("../config.php");
 require_once("../functions.php");
 
 if (!isset($_SESSION['user'])) {
@@ -12,10 +11,16 @@ if (!isset($_SESSION['user'])) {
 
 require_once("header.php");
 
-echo '		
-		<br><h3>Data Storage Finder Administration Menu</h3>
+echo '	<br><h3>Data Storage Finder Administration Menu</h3>';
 
-		<a href="section_create.php">Add section to navigation menu</a>
+$install_file = '../install.php';
+
+if (file_exists($install_file)) {
+	echo '<span style="color: red; font-weight: bold;">SECURITY RISK: Please delete your install.php file!</span>';
+	echo '<p>&nbsp;</p>';
+}
+
+echo '	<a href="section_create.php">Add section to navigation menu</a>
 		<br>
 		<a href="section_update.php">Update section on navigation menu</a>
 		<br>
