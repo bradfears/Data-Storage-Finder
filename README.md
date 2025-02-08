@@ -23,8 +23,8 @@ Configuring the Data Storage Finder will take some time and planning. You are li
 
 ## Configuration
 1. Edit your config.php file to specify database name, user, etc. Also, **very important**, change your SALT.
-2. Create your first user by pointing your browser to <domain>/dsf/install.php. You should delete install.php after the first user is created.
-3. Log into the Administration Menu with your newly created user (i.e. <domain>/dsf/admin).
+2. Create your first user by pointing your browser to &lt;domain&gt;/dsf/install.php. You should delete install.php after the first user is created.
+3. Log into the Administration Menu with your newly created user (i.e. &lt;domain&gt;/dsf/admin).
 4. On the Admin Menu index page, pay attention to the text in red. Steps need to be followed in order or things will not make sense.  
   
     * FIRST, create your navigation menu. These menu items are questions that make up your filtering pane. Examples might be "What is the purpose of data storage", or "What is the classification of your data?"  
@@ -35,9 +35,8 @@ Configuring the Data Storage Finder will take some time and planning. You are li
   
     * FOURTH, it's time to add actual items. Click *Add Item* from the Admin Menu, then give the item a name and subtitle. These will be diplayed on the tiles that are presented to the user. After you add an item, go back and EDIT the item. Now you will see the fields you defined, such as "Cost". Enter the appropriate information for each field type.  
 
-## Screenshots (sorry I don't have a demo site yet)
-Main Screen
-[DSF-Main-Screen.jpg](https://postimg.cc/F1bgRg6Q)
+## Demo site
+[https://data-storage-finder.dev](https://data-storage-finder.dev/)  
+  
+If you would like access to test the administrative menu, please email Brad at the site listed above.
 
-Admin Menu
-[DSF-Admin-Menu.jpg](https://postimg.cc/bGzf7R4N)
